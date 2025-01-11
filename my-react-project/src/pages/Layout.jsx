@@ -95,13 +95,14 @@ function Layout(props) {
             </Box>
 
             {/* this is for mobile devices */}
-            <MenuRounded onClick={()=>{
+            <MenuRounded htmlColor='#91f' onClick={()=>{
               DrawerToggle(true)
             }}
             sx={{
               display:{md:"none", sm:"inline"},
               verticalAlign:"-10%",
-              textAlign:"right"
+              textAlign:"right",
+              color:"text.dark"
             }} />
             <Drawer id="drawer-appbar"
               open={drawerOpen}
@@ -110,7 +111,14 @@ function Layout(props) {
               }}
               anchor='right'
               sx={{
-                display:{md:"none",sm:"inline-flex"},
+                display:{md:"none",sm:"inline-flex"}
+              }}
+              
+              PaperProps={{
+                sx:{
+                    bgcolor:"common.main",
+                    backgroundImage:"none"
+                }
               }}>
                 <List sx={{
                   p:3
@@ -118,12 +126,15 @@ function Layout(props) {
                   {navItems.map((val,index)=> (
                     val.name !== "blog" ?
                   <ListItem key={index}>
-                    <Link to={val.link} 
+                    <Link to={val.link} style={{
+                        textDecoration:"none",
+                    }}  
                       onClick={()=>{
                         DrawerToggle(false);
                       }} >
                       <Typography sx={{
-                        textTransform:"capitalize"
+                        textTransform:"capitalize",
+                        color:"secondary.main"
                       }}>{val.name}
                       </Typography>
                     </Link>
@@ -144,12 +155,14 @@ function Layout(props) {
                       >
                         <Typography sx={{
                           textTransform:"capitalize",
+                          color:"secondary.main"
                         }}>{val.name}
                         </Typography>
                       </AccordionSummary>
                       <AccordionDetails
                       sx={{
-                        bgcolor:"common.black"
+                        bgcolor:"background.default",
+                        p:2
                       }}>
                         <Typography component="a" 
                         onClick={()=>{
@@ -164,7 +177,8 @@ function Layout(props) {
                             textDecoration:"underline",
                             fontWeight:700,
                             fontSize:{lg:"1.3rem", md:"1.0rem"},
-                            p:1
+                            p:1,
+                            cursor:"pointer"
                           }}
                           >
                           How to make your life healthier
@@ -182,12 +196,14 @@ function Layout(props) {
                             DrawerToggle(false);
                               }
                             }
-                            variant="h6" sx={{
+                            variant="h6" 
+                            sx={{
                               color:"primary.main",
                               textDecoration:"underline",
                               fontWeight:700,
                               fontSize:{lg:"1.3rem", md:"1.0rem"},
-                              p:1
+                              p:1,
+                              cursor:"pointer"
                             }}>
                             The Easy Guide to Productivity and Training
                           </Typography>
@@ -203,6 +219,22 @@ function Layout(props) {
                 </ListItem>
                 
                 ))}
+                <ListItem>
+                  <Box component="span" sx={{
+                      alignContent:"left",
+                      ml:0,
+                      cursor:"pointer"
+                    }} 
+                    onClick={()=>{
+                      if (props.mode === "dark") {
+                        props.setMode("light")
+                    } else if (props.mode === "light") {
+                      props.setMode("dark");
+                    }
+                    }} >
+                      <SwitchMode mode={props.mode} />
+                  </Box>
+                </ListItem>
                 </List>
             </Drawer>
             
