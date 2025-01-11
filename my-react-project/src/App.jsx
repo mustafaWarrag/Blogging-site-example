@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate, Link, useLocation } from "react-router-dom";
 import { Button, Card, CardMedia, CardContent, Stack, Skeleton, Modal, TextField } from '@mui/material';
 import { Box, Typography, Paper, Divider } from "@mui/material";
 import { Facebook, LinkedIn, GitHub, CloseRounded } from "@mui/icons-material";
@@ -136,12 +136,15 @@ function Home(props) {
             }}>
               Tutorial
             </Typography>
-            <Typography variant="subtitle1" component="a"
-              href="/blog" title="Blog example"
+            <Typography variant="subtitle1" component="a" onClick={()=>{
+              navi("/blog");
+            }}
+              title="Blog example"
               sx={{
                 color:"text.primary",
                 textDecoration:"none",
                 ":hover":{textDecoration:"underline"},
+                cursor:"pointer",
             }}>
               How to Write Professional Emails -- Easy Guide
             </Typography>
@@ -167,14 +170,18 @@ function Home(props) {
               }}>
                 {val.category}
               </Typography>
-              <Typography component="a" href="/blog" title="Blog Example"
-              variant='subtitle1' sx={{
-                textDecoration:"none",
-                color:"text.primary",
-                ":hover":{textDecoration:"underline"},
-              }}>
-                {val.article}
-              </Typography>
+              <Link to="/blog" >
+                <Typography 
+                title="Blog Example"
+                variant='subtitle1' sx={{
+                  textDecoration:"none",
+                  color:"text.primary",
+                  cursor:"pointer",
+                  ":hover":{textDecoration:"underline"},
+                }}>
+                  {val.article}
+                </Typography>
+              </Link>
             </Paper>
           ))}
         </Stack>
@@ -298,6 +305,14 @@ function Contacts() {
     </Container>
     </>
   )
+};
+
+function ScrollToTop() {
+  let location = useLocation();
+  useEffect(()=>{
+    window.scrollTo(0,0);
+  },[location]);
+  return null;
 }
 
 
@@ -368,6 +383,7 @@ function App() {
             width:"100%"
             }}/>
         <BrowserRouter>
+        <ScrollToTop />
           <Routes>
             <Route path="/" element={<Layout mode={mode} setMode={setMode} navItems={navItems} />}>
               <Route index element={<Home loading={loading} socialMediaIcons={socialMediaIcons} popularArticles={popularArticles}/>} />
@@ -380,242 +396,6 @@ function App() {
           </Routes>
         </BrowserRouter>
         <Footer socialMediaIcons={socialMediaIcons} />
-
-      {/*
-      <AppBar position='static' sx={{bgcolor:"common.black"}}>
-        <Toolbar disableGutters>
-          <Container maxWidth={"xl"} sx={{
-            display:"flex",
-            justifyContent:"space-between",
-          }}>
-              <Box sx={{
-                m:1,
-                ml:0,
-              }}>
-                <StreamOutlined sx={{
-                  mr:1,
-                  verticalAlign:"-8%",
-                  }} />
-                <Typography variant='h5' noWrap
-                component="a"
-                sx={{
-                  textDecoration:"none",
-                  color:"common.white",
-                  letterSpacing:"0.5rem",
-                  mr:2,
-                  display: { xs:"flex", md:"inline-flex"},
-                }}
-                >
-                  BLOG
-                </Typography>
-
-                 this is for mobile devices
-                <Menu id="menu-appbar"
-                  keepMounted
-                  open
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical:"bottom",
-                    horizontal:"left"
-                  }}
-                  transformOrigin={{
-                    vertical:"bottom",
-                    horizontal:"left"
-                  }}
-                  sx={{
-                    display:{xs:"block", md:"none"},
-                  }}>
-                  {navItems.map((val,index)=> (
-                  <MenuItem key={index}>
-                    <Typography>{val}</Typography>
-                  </MenuItem>
-                ))}
-
-                </Menu>
-
-                </Box>
-
-                <Box sx={{
-                  flexGrow:0,
-                  display:"inline-flex",
-              }}>
-                {navItems.map((val,index)=> (
-                  <Button key={index}
-                  sx={{
-                    display:"block",
-                    m:1,
-                    ml:8,
-                    textTransform:"capitalize",
-                    color:"secondary.light",
-                  }}
-                  variant="text"
-                  >{val}
-                  </Button>
-                ))}
-
-              </Box>
-              
-          </Container>
-        </Toolbar>
-      </AppBar>
-
-      <Container maxWidth={"xl"} sx={{
-        backgroundImage:`url(${img2})`,
-        backgroundPosition:"center center",
-        backgroundRepeat:"no-repeat",
-        backgroundSize:"cover",
-      }}>
-        <Box sx={{
-          p:10,
-          display:"flex",
-          flexDirection:"column",
-          flexWrap:"nowrap",
-          justifyContent:"center",
-          alignContent:"center",
-          alignItems:"center",
-          height:"91.5vh",
-        }}>
-          <Typography sx={{
-            textAlign:"center",
-            fontSize:"1.5rem",
-            fontWeight:"100",
-            letterSpacing:"0.5rem"
-          }}>
-            Latest on the blog
-          </Typography>
-          <Typography variant="subtitle1" sx={{
-            textAlign:"center",
-            fontSize:"2.9rem",
-            fontFamily:"Lobster, serif",
-            fontWeight:"400",
-            fontStyle:"normal",
-            color:"common.white",
-            letterSpacing:"0.3rem",
-          }}>
-            Title Of Latest Blog Regarding Esoteric Problem 
-          </Typography>
-          <Button variant="outlined" sx={{
-            width:"fit-content",
-            color:"common.black",
-            borderColor:"secondary.light",
-            textTransform:"lowercase",
-            pr:5,
-            pl:5,
-            }}>
-              -view-
-          </Button>
-        </Box>
-      </Container>
-      <Divider />
-
-      <Container maxWidth={"xl"} sx={{
-          p:5,
-          display:"flex",
-          flexDirection:"row",
-          justifyContent:"space-around",
-        }}>
-        <Box sx={{
-          flexGrow:1,
-          mr:3
-        }}>
-          <Card sx={{
-            borderRadius:2,
-          }}>
-            <CardMedia image={img1}
-              title="Stock image of a woman using a laptop" 
-              sx={{
-                height:"350px",
-                backgroundPosition:"10% 10%",
-              }} />
-            <CardContent>
-              <Typography variant="body1" sx={{
-                color:"#999",
-                letterSpacing:"0.2rem",
-                textTransform:"uppercase"
-              }}>
-                Tutorial
-              </Typography>
-              <Typography variant="subtitle1" component="a"
-                href="#article" 
-                sx={{
-                  color:"common.white",
-                  textDecoration:"none",
-                  ":hover":{textDecoration:"underline"}
-              }}>
-                How to Write Professional Emails -- Easy Guide
-              </Typography>
-            </CardContent>
-          </Card>
-        </Box>
-        <Box>
-          <Typography variant={"overline"} sx={{
-              color:"primary.dark",
-            }}>
-              Most Popular
-            </Typography>
-          <Stack spacing={2}>
-
-            {popularArticles.map((val,index)=> (
-              <Paper key={index} sx={{
-                p:2,
-              }}>
-                <Typography variant="body1" sx={{
-                  color:"#999",
-                  letterSpacing:"0.2rem",
-                  textTransform:"uppercase"
-                }}>
-                  {val.category}
-                </Typography>
-                <Typography component="a" href="#article"
-                variant='subtitle1' sx={{
-                  textDecoration:"none",
-                  color:"common.white",
-                  ":hover":{textDecoration:"underline"},
-                }}>
-                  {val.article}
-                </Typography>
-              </Paper>
-            ))}
-          </Stack>
-        </Box>
-      </Container>
-
-      <Container maxWidth="xl" disableGutters
-      sx={{
-        display:"flex",
-        flexDirection:"row",
-        justifyContent:"space-between",
-        alignContent:"center",
-        alignItems:"center",
-        bgcolor:"common.black",
-        p:1,
-        borderTop:"2px solid",
-        borderTopColor:"primary.dark"
-      }}>
-        <Typography variant="body1" sx={{
-          textAlign:"left",
-          fontWeight:"300",
-          mr:0
-        }}>
-           &copy; 2025 Mustafa Warrag
-        </Typography>
-        <Typography variant="body1" sx={{
-          fontWeight:"300"
-        }}>
-          A Front-end Developer
-        </Typography>
-        <ButtonGroup aria-label="Basic button group">
-          {socialMediaIcons.map((val,ind)=>(
-            <Button key={ind} title={val.title} href={val.ref} target="_blank"
-            sx={{
-              color:"primary.dark"
-            }}>
-              {val.icon}
-            </Button>
-          ))}
-        </ButtonGroup>
-      </Container>
-      */}
 
     </ThemeProvider>
     </>

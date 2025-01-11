@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Link, Outlet } from "react-router-dom";
-import { Button, AppBar, Toolbar, Menu, MenuItem } from '@mui/material';
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Button, AppBar, Toolbar, Menu, MenuItem, Drawer, ListItem, List, Divider, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { Box, Typography } from "@mui/material";
-import { StreamOutlined, ArrowDropDown ,WbSunny, DarkModeOutlined } from "@mui/icons-material";
+import { StreamOutlined, ArrowDropDown ,WbSunny, DarkModeOutlined, DrawOutlined, LayersClear, MenuRounded } from "@mui/icons-material";
 import { Container } from '@mui/material';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -26,7 +26,12 @@ function SwitchMode(props) {
 
 function Layout(props) {
   const [anchorEl, setAnchorEl] = useState(null);
+
+  let [drawerOpen, setDrawer] = useState(false);
+  
   let opened = Boolean(anchorEl);
+
+  let navi = useNavigate();
   
   function handleClose() {
     setAnchorEl(null);
@@ -38,6 +43,10 @@ function Layout(props) {
   function handleMouseLeave(e) {
     opened = false;
     setAnchorEl(null);
+  }
+
+  function DrawerToggle(bool) {
+    setDrawer(bool);
   }
 
   useEffect(()=> {
@@ -77,43 +86,133 @@ function Layout(props) {
               letterSpacing:"0.5rem",
               fontSize:{md:"1.5rem", xs:"1.2rem"},
               mr:{md:2, sm:0},
-              display:"inline",
+              display:{md:"inline",sm:"none"},
             }}
             >
               BLOG
             </Typography>
 
-            {/* this is for mobile devices
-            <Menu id="menu-appbar"
-              keepMounted
-              open
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical:"bottom",
-                horizontal:"left"
-              }}
-              transformOrigin={{
-                vertical:"bottom",
-                horizontal:"left"
-              }}
-              sx={{
-                display:{xs:"block", md:"none"},
-              }}>
-              {navItems.map((val,index)=> (
-              <MenuItem key={index}>
-                <Typography>{val}</Typography>
-              </MenuItem>
-            ))}
-
-            </Menu>
-            */}
-
             </Box>
+
+            {/* this is for mobile devices */}
+            <MenuRounded onClick={()=>{
+              DrawerToggle(true)
+            }}
+            sx={{
+              display:{md:"none", sm:"inline"},
+              verticalAlign:"-10%",
+              textAlign:"right"
+            }} />
+            <Drawer id="drawer-appbar"
+              open={drawerOpen}
+              onClose={()=>{
+                DrawerToggle(false)
+              }}
+              anchor='right'
+              sx={{
+                display:{md:"none",sm:"inline-flex"},
+              }}>
+                <List sx={{
+                  p:3
+                }}>
+                  {navItems.map((val,index)=> (
+                    val.name !== "blog" ?
+                  <ListItem key={index}>
+                    <Link to={val.link} 
+                      onClick={()=>{
+                        DrawerToggle(false);
+                      }} >
+                      <Typography sx={{
+                        textTransform:"capitalize"
+                      }}>{val.name}
+                      </Typography>
+                    </Link>
+                  </ListItem>
+                  :
+                  <ListItem key={index} sx={{pl:1}}>
+                    <Accordion
+                    sx={{
+                          bgcolor:"transparent",
+                          backgroundImage:"none",
+                          boxShadow:"none",
+                          border:"1px solid #121212"
+                    }}>
+                      <AccordionSummary  
+                      id="accordian-blog" 
+                      expandIcon={ <ArrowDropDown />}
+                      sx={{pl:1}}
+                      >
+                        <Typography sx={{
+                          textTransform:"capitalize",
+                        }}>{val.name}
+                        </Typography>
+                      </AccordionSummary>
+                      <AccordionDetails
+                      sx={{
+                        bgcolor:"common.black"
+                      }}>
+                        <Typography component="a" 
+                        onClick={()=>{
+                          navi("/blog"); 
+                          handleClose();
+                          DrawerToggle(false);
+                            }
+                          } 
+                          variant="h6"
+                          sx={{
+                            color:"primary.main",
+                            textDecoration:"underline",
+                            fontWeight:700,
+                            fontSize:{lg:"1.3rem", md:"1.0rem"},
+                            p:1
+                          }}
+                          >
+                          How to make your life healthier
+                        </Typography>
+                      <Typography variant="body1" sx={{
+                        fontSize:"1.0rem",
+                        mb:3,
+                        pl:1
+                      }}>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit...
+                      </Typography>
+                          <Typography component={"a"} onClick={()=>{
+                            navi("/blog"); 
+                            handleClose();
+                            DrawerToggle(false);
+                              }
+                            }
+                            variant="h6" sx={{
+                              color:"primary.main",
+                              textDecoration:"underline",
+                              fontWeight:700,
+                              fontSize:{lg:"1.3rem", md:"1.0rem"},
+                              p:1
+                            }}>
+                            The Easy Guide to Productivity and Training
+                          </Typography>
+                        <Typography variant="body1" sx={{
+                        fontSize:"1.0rem",
+                        mb:3,
+                        pl:1
+                      }}>
+                          Lorem ipsum dolor sit amet consectetur adipisicing elit...
+                        </Typography>
+                      </AccordionDetails>
+                      </Accordion>
+                </ListItem>
+                
+                ))}
+                </List>
+            </Drawer>
+            
+
+            
 
             <Box sx={{
               flexGrow:0,
               flexShrink:{xl:1, sm:3},
-              display:"inline-flex",
+              display:{md:"inline-flex", sm:"none"},
           }}>
             {navItems.map((val,index)=> (
               val.name !== "blog" ?
@@ -137,7 +236,6 @@ function Layout(props) {
               : 
               <span key={index}>
               <Button
-              href="/blog"
               title="blogs"
               variant="text"
               id="basic-button"
@@ -224,13 +322,13 @@ function Layout(props) {
                   Featured Blogs
                 </Typography>
               
-              <MenuItem sx={{
-                //display:"block",
-                //p:0,
-                //":hover":{bgcolor:"common.black"}
-                //bgcolor:"primary.light"
-              }}>
-                <Typography component="a" href="/blog/" variant="h6">
+              <MenuItem>
+                <Typography component="a" onClick={()=>{
+                  navi("/blog"); 
+                  handleClose()
+                    }
+                  } 
+                  variant="h6">
                   How to make your life healthier
                 </Typography>
               </MenuItem>
@@ -238,7 +336,12 @@ function Layout(props) {
                   Lorem ipsum dolor sit amet consectetur adipisicing elit...
                 </Typography>
                 <MenuItem>
-                  <Typography component={"a"} href="/blog/" variant="h6">
+                  <Typography component={"a"} onClick={()=>{
+                    navi("/blog"); 
+                    handleClose()
+                      }
+                    }
+                    variant="h6">
                     The Easy Guide to Productivity and Training
                   </Typography>
                 </MenuItem>
@@ -248,44 +351,6 @@ function Layout(props) {
             </Menu>
             </span>
             ))}
-
-            {/*
-            <Button 
-              id="basic-button"
-              aria-controls={opened ? "basic-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={opened ? "true" : undefined}
-              onClick={handleClick}
-              >
-              <Typography  sx={{color:"primary.main"}} component="span">
-                Blog
-              </Typography>
-            </Button>
-            <Menu 
-              id="basic-menu"
-              open={opened}
-              anchorEl={anchorEl}
-              onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button"
-              }} 
-              >
-              <MenuItem sx={{
-                bgcolor:"secondary.dark"
-              }}>
-                <Typography variant="overline">
-                  Featured Blogs
-                </Typography>
-              </MenuItem>
-              <MenuItem sx={{
-                bgcolor:"primary.light"
-              }}>
-                <Typography>
-                  How to make your life healthier
-                </Typography>
-              </MenuItem>
-            </Menu>
-            */}
             
             <Box component="span" sx={{
               alignContent:"center", 

@@ -8,6 +8,7 @@ arr.fill("");
 
 export default function BlogOne(props) {
 
+
     function detectScroll () {
         let ele = document.getElementById("progress-line");
         if (window.scrollY > 480) {
@@ -27,7 +28,8 @@ export default function BlogOne(props) {
         window.addEventListener("scroll", detectScroll);
         return ()=> window.removeEventListener("scroll", detectScroll);
     }
-    ,[])
+    ,[]);
+
 
     if (props.loading === true) {
         return (
