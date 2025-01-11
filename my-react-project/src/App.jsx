@@ -19,8 +19,8 @@ import img1 from "./images/young-woman-laptop-window.jpg";
 import img2 from "./images/woman-holding-camera-2.jpeg";
 import imgBlog from "./images/office-image.jpg"
 
-import Layout from './pages/Layout';
-import BlogOne from './pages/blogOne';
+import Layout from './pages/Layout.jsx';
+import BlogOne from './pages/BlogOne.jsx';
 import Nopage from './pages/Nopage.jsx';
 import Footer from './pages/Footer.jsx';
 import About from './pages/About.jsx';
