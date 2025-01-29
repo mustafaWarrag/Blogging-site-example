@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { Button, AppBar, Toolbar, Menu, MenuItem, Drawer, ListItem, List, Divider, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import { Button, AppBar, Toolbar, Menu, MenuItem, Drawer, ListItem, List, Divider, Accordion, AccordionSummary, AccordionDetails, Skeleton } from '@mui/material';
 import { Box, Typography } from "@mui/material";
 import { StreamOutlined, ArrowDropDown ,WbSunny, DarkModeOutlined, DrawOutlined, LayersClear, MenuRounded } from "@mui/icons-material";
 import { Container } from '@mui/material';
@@ -10,8 +10,9 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 let navItems = [
-    {name:"home", link:"/"}, {name:"about", link:"/about"}, 
-    {name:"blog", link:"/blog"}, {name:"contacts", link:"/contact"}
+    {name:"home", link:"/"}, {name:"categories", link:"/categories"}, 
+    {name:"blog", link:"/blog"}, {name:"contacts", link:"/contact"},
+    {name:"about", link:"/about"}
 ];
 
 function SwitchMode(props) {
@@ -54,6 +55,15 @@ function Layout(props) {
     return ()=> window.removeEventListener("scroll", handleMouseLeave);
   }
   ,[])
+
+  if (props.loading) {
+    return (
+      <>
+        <Skeleton variant="rectangular" height="9vh" />
+        <Outlet />
+      </>
+    )
+  }
 
 
     return (
@@ -166,7 +176,7 @@ function Layout(props) {
                       }}>
                         <Typography component="a" 
                         onClick={()=>{
-                          navi("/blog"); 
+                          navi(`/blog/id/${props.info[0]._id}`); 
                           handleClose();
                           DrawerToggle(false);
                             }
@@ -181,17 +191,18 @@ function Layout(props) {
                             cursor:"pointer"
                           }}
                           >
-                          How to make your life healthier
+                          {props.info[0].title}
                         </Typography>
                       <Typography variant="body1" sx={{
                         fontSize:"1.0rem",
                         mb:3,
-                        pl:1
+                        pl:1,
+                        textOverflow:"ellipsis"
                       }}>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit...
+                        {props.info[0].content.slice(0, 30)}...
                       </Typography>
                           <Typography component={"a"} onClick={()=>{
-                            navi("/blog"); 
+                            navi(`/blog/id/${props.info[1]._id}`); 
                             handleClose();
                             DrawerToggle(false);
                               }
@@ -205,14 +216,15 @@ function Layout(props) {
                               p:1,
                               cursor:"pointer"
                             }}>
-                            The Easy Guide to Productivity and Training
+                            {props.info[1].title}
                           </Typography>
                         <Typography variant="body1" sx={{
                         fontSize:"1.0rem",
                         mb:3,
-                        pl:1
+                        pl:1,
+                        textOverflow:"ellipsis"
                       }}>
-                          Lorem ipsum dolor sit amet consectetur adipisicing elit...
+                          {props.info[1].content.slice(0, 30)}...
                         </Typography>
                       </AccordionDetails>
                       </Accordion>
@@ -356,29 +368,29 @@ function Layout(props) {
               
               <MenuItem>
                 <Typography component="a" onClick={()=>{
-                  navi("/blog"); 
+                  navi(`/blog/id/${props.info[0]._id}`); 
                   handleClose()
                     }
                   } 
                   variant="h6">
-                  How to make your life healthier
+                  {props.info[0].title}
                 </Typography>
               </MenuItem>
               <Typography variant="body1">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit...
+                {props.info[0].content.slice(0, 30)}...
                 </Typography>
                 <MenuItem>
                   <Typography component={"a"} onClick={()=>{
-                    navi("/blog"); 
+                    navi(`/blog/id/${props.info[1]._id}`); 
                     handleClose()
                       }
                     }
                     variant="h6">
-                    The Easy Guide to Productivity and Training
+                    {props.info[1].title}
                   </Typography>
                 </MenuItem>
                 <Typography variant="body1">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit...
+                  {props.info[1].content.slice(0, 30)}...
                 </Typography>
             </Menu>
             </span>

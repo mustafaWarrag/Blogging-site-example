@@ -27,7 +27,7 @@ export default function Footer(props) {
             fontWeight:"300",
             color:"text.primary"
           }}>
-            A Front-end Developer
+            A Web Developer
           </Typography>
           <ButtonGroup aria-label="Basic button group">
             {props.socialMediaIcons.map((val,ind)=>(
