@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { Button, AppBar, Toolbar, Menu, MenuItem, Drawer, ListItem, List, Divider, Accordion, AccordionSummary, AccordionDetails, Skeleton } from '@mui/material';
+import { Button, AppBar, Toolbar, Menu, MenuItem, Drawer, ListItem, List, Accordion, AccordionSummary, AccordionDetails, Skeleton } from '@mui/material';
 import { Box, Typography } from "@mui/material";
-import { StreamOutlined, ArrowDropDown ,WbSunny, DarkModeOutlined, DrawOutlined, LayersClear, MenuRounded } from "@mui/icons-material";
+import { StreamOutlined, ArrowDropDown ,WbSunny, DarkModeOutlined, MenuRounded } from "@mui/icons-material";
 import { Container } from '@mui/material';
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+//import '@fontsource/roboto/300.css';
+//import '@fontsource/roboto/400.css';
+//import '@fontsource/roboto/500.css';
+//import '@fontsource/roboto/700.css';
 
 let navItems = [
     {name:"home", link:"/"}, {name:"categories", link:"/categories"}, 

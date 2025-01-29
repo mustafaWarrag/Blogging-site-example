@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
-import { Facebook, LinkedIn, GitHub } from "@mui/icons-material";
+import { LinkedIn, GitHub } from "@mui/icons-material";
 import { LinearProgress, CssBaseline, GlobalStyles } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { purple, cyan } from '@mui/material/colors';
@@ -9,13 +9,7 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-//import 'https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Lobster&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap';
-//install base mui [done]
-//install base mui fonts [done]
-//install mui icons [done]
-//install emotion engine [done]
 import img1 from "./images/young-woman-laptop-window.jpg";
-import img2 from "./images/woman-holding-camera-2.jpeg";
 import imgBlog from "./images/office-image.jpg"
 
 import Layout from './pages/Layout.jsx';
@@ -31,9 +25,6 @@ import Categories from './pages/Categories.jsx';
 
 import blogService from './services/blogService.js';
 
-
-
-
 function ScrollToTop() {
   let location = useLocation();
   useEffect(()=>{
@@ -41,7 +32,6 @@ function ScrollToTop() {
   },[location]);
   return null;
 }
-
 
 function App() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -72,7 +62,6 @@ function App() {
   function handleOpenNavMenu(e) {
     setAnchorEl(e.currentTarget);
   }
-  
 
   const darkMode =  createTheme({
     palette:{
@@ -96,10 +85,8 @@ function App() {
       prog.style.display = "none";
       setLoading(false);
     }
-    
     useEffect(()=>{
       grabBlogs();
-
       //window.addEventListener("load", hideProg);
       //return ()=> window.removeEventListener("load", hideProg);
     }
