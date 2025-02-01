@@ -256,7 +256,7 @@ function Layout(props) {
             <Box sx={{
               flexGrow:0,
               flexShrink:{xl:1, sm:3},
-              display:{md:"inline-flex", sm:"none"},
+              display:{md:"inline-flex", sm:"none", xs:"none"},
           }}>
             {navItems.map((val,index)=> (
               val.name !== "blog" ?
