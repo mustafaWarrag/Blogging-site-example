@@ -92,9 +92,9 @@ export default function Home(props) {
         p:5,
         display:"flex",
         flexDirection:{md:"row", sm:"column"},
-        flexWrap:"nowrap",
+        flexWrap:{md:"nowrap", xs:"wrap"},
         justifyContent:{md:"space-around", sm:"space-between", xs:"space-between"},
-        alignItems:{xs:"center"}
+        //alignItems:{xs:"center"}
         //alignContent:{md:"normal", sm:"space-between"},
         //alignItems:{md:"normal", xs:"space-between"}
       }}>
@@ -110,7 +110,7 @@ export default function Home(props) {
             title="Stock image" 
             sx={{
               height:"350px",
-              backgroundPosition:{md:"10% 10%", xs:"70% 50%"},
+              backgroundPosition:{md:"10% 10%", xs:"center center"},
             }} />
           <CardContent>
             <Typography variant="body1" sx={{

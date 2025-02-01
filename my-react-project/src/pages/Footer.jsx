@@ -25,7 +25,9 @@ export default function Footer(props) {
           </Typography>
           <Typography variant="body1" sx={{
             fontWeight:"300",
-            color:"text.primary"
+            color:"text.primary",
+            textAlign:"center"
+            //flexGrow:{md:0, xs:1}
           }}>
             A Web Developer
           </Typography>

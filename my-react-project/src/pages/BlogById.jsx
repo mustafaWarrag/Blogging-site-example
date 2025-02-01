@@ -98,7 +98,10 @@ export default function BlogById(props) {
                 left:0
                     }} />
 
-            <Container sx={{pb:3,pt:3}}>
+            <Container disableGutters sx={{
+                pb:3,
+                pt:{md:3, xs:0}
+                }}>
             <Card>
                 <CardMedia image={info.img} component="img" title={info.imgLink} 
                 sx={{
@@ -108,7 +111,7 @@ export default function BlogById(props) {
                     borderBottom:`10px solid ${deepPurple[500]}`
                     }} />
                 <Paper elevation={3} sx={{
-                p:{md:11, xs:6},
+                p:{md:11, xs:2},
                 //bgcolor:"common.black"
             }}>         
                         
@@ -166,7 +169,7 @@ export default function BlogById(props) {
                         
                     </CardContent>
                     <Paper elevation={4} sx={{
-                        p:10,
+                        p:{md:10, xs:4},
                         mb:4,
                         bgcolor:"primary.light",
                         color:"common.black"

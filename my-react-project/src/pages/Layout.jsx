@@ -96,7 +96,7 @@ function Layout(props) {
               letterSpacing:"0.5rem",
               fontSize:{md:"1.5rem", xs:"1.2rem"},
               mr:{md:2, sm:0},
-              display:{md:"inline",sm:"none"},
+              display:{md:"inline",sm:"none", xs:"none"},
             }}
             >
               BLOG
