@@ -93,7 +93,8 @@ export default function Home(props) {
         display:"flex",
         flexDirection:{md:"row", sm:"column"},
         flexWrap:"nowrap",
-        justifyContent:{md:"space-around", sm:"space-between"},
+        justifyContent:{md:"space-around", sm:"space-between", xs:"space-between"},
+        alignItems:{xs:"center"}
         //alignContent:{md:"normal", sm:"space-between"},
         //alignItems:{md:"normal", xs:"space-between"}
       }}>
@@ -106,7 +107,7 @@ export default function Home(props) {
           mb:3
         }}>
           <CardMedia image={props.info[5].img? props.info[5].img : img1}
-            title="Stock image of a woman using a laptop" 
+            title="Stock image" 
             sx={{
               height:"350px",
               backgroundPosition:{md:"10% 10%", xs:"70% 50%"},
