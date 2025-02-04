@@ -1,20 +1,5 @@
-import cuid2 from "@paralleldrive/cuid2";
-import mongoosey from "../db.js";
-import { ObjectId } from "mongodb";
-//console.log(ObjectId().toString())
+import Blog from "../models/Blog.js";
 
-const Blog = mongoosey.model("Blog", {
-            _id:{type:String, default:(new ObjectId().toString())},
-            author:{type:String, required:true},
-            authorId:{type:String, default:cuid2.createId()},
-            title:{type:String, required:true},
-            content:{type:String, required:true},
-            img:String,
-            link:String,
-            uploadDate:{type:Number, default:Date.now},
-            tags:{type:[String], index:true, required:true}
-
-}, "blogs");
 let blogs;
 export default class BlogDAO {
     if(blogs) {

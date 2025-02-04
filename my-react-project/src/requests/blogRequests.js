@@ -1,5 +1,5 @@
 import axios from "axios"
-export default class blogService {
+export default class blogRequests {
     static async fetchAllBlogs() {
         //return await axios.get("http://localhost:8080/api/v1/blogs");
         return await axios.get("https://blogging-site-example.onrender.com/api/v1/blogs");

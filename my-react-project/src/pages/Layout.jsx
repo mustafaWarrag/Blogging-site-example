@@ -4,10 +4,11 @@ import { Button, AppBar, Toolbar, Menu, MenuItem, Drawer, ListItem, List, Accord
 import { Box, Typography } from "@mui/material";
 import { StreamOutlined, ArrowDropDown ,WbSunny, DarkModeOutlined, MenuRounded } from "@mui/icons-material";
 import { Container } from '@mui/material';
-//import '@fontsource/roboto/300.css';
-//import '@fontsource/roboto/400.css';
-//import '@fontsource/roboto/500.css';
-//import '@fontsource/roboto/700.css';
+
+import Login from './Login.jsx';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../features/userSlice.js';
 
 let navItems = [
     {name:"home", link:"/"}, {name:"categories", link:"/categories"}, 
@@ -27,12 +28,14 @@ function SwitchMode(props) {
 
 function Layout(props) {
   const [anchorEl, setAnchorEl] = useState(null);
-
   let [drawerOpen, setDrawer] = useState(false);
-  
   let opened = Boolean(anchorEl);
-
   let navi = useNavigate();
+  
+  const [open, setOpen] = useState(false); //state for managing the sign-up modal
+  
+  const username = useSelector((store) => store.info.username);
+  const dispatch = useDispatch()
   
   function handleClose() {
     setAnchorEl(null);
@@ -232,6 +235,31 @@ function Layout(props) {
                 
                 ))}
                 <ListItem>
+                  {username?  (
+                    <Button onClick={()=>{
+                      navi("/profile");
+                      setDrawer(false);
+                    }} 
+                    sx={{
+                      color:"text.primary",
+                      ml:"-9px"
+                    }}>
+                      Profile
+                    </Button>
+                  ) : (
+                    <Button sx={{
+                      color:"text.primary",
+                      ml:"-9px"
+                    }} 
+                    onClick={()=>{
+                      setOpen(true);
+                      setDrawer(false);
+                    }}>Login
+                    </Button>
+                  )}
+                  </ListItem>
+
+                <ListItem>
                   <Box component="span" sx={{
                       alignContent:"left",
                       ml:0,
@@ -252,12 +280,34 @@ function Layout(props) {
             
 
             
-
+            {/* This is for laptop and desktop screens */}
             <Box sx={{
               flexGrow:0,
-              flexShrink:{xl:1, sm:3},
+              flexShrink:{xl:1, md:3},
               display:{md:"inline-flex", sm:"none", xs:"none"},
-          }}>
+              }}>
+                  {username?  (
+                    <Button onClick={()=>{
+                      navi("/profile")
+                    }} 
+                    sx={{
+                      color:"text.primary",
+                      m:1,
+                      mr:0,
+                      ml:"-9px",
+                      fontSize:{lg:"1.0rem", md:"0.8rem"}
+                    }}>
+                      Profile
+                    </Button>
+                  ) : (
+                    <>
+                      <Button sx={{color:"text.primary"}}
+                      onClick={()=>{
+                        setOpen(true);
+                      }}>Login</Button>
+                      <Login open={open} setOpen={setOpen} />
+                    </>
+                  )}
             {navItems.map((val,index)=> (
               val.name !== "blog" ?
                 <Link style={{textDecoration:"none"}} title={`My ${val.name}`}
@@ -266,11 +316,11 @@ function Layout(props) {
                 sx={{
                     display:"block",
                     m:1,
-                    ml:{md:8,xs:3},
+                    ml:{xl:8,md:4},
                     textTransform:"capitalize",
                     textDecoration:"none",
                     color:"primary.main",
-                    fontSize:{md:"1rem", xs:"0.8rem"}
+                    fontSize:{lg:"1rem", md:"0.8rem"}
                     //borderColor:"secondary.dark"
                 }}
                 variant="text"
@@ -291,11 +341,11 @@ function Layout(props) {
               sx={{
                 display:"block",
                 m:1,
-                ml:{md:8, xs:3},
+                ml:{xl:8, md:4},
                 textTransform:"capitalize",
                 textDecoration:"none",
                 color:"primary.main",
-                fontSize:{md:"1rem", xs:"0.8rem"}
+                fontSize:{lg:"1rem", md:"0.8rem"}
                 //borderColor:"secondary.dark"
             }}
               >
@@ -304,7 +354,7 @@ function Layout(props) {
                 sx={{
                   display:"inline", 
                   m:0,
-                  fontSize:{md:"1.3rem", xs:"1.0rem"},
+                  fontSize:{lg:"1.3rem", md:"1.0rem"},
                   verticalAlign:"middle"
                   }} />
             </Button>
@@ -325,7 +375,9 @@ function Layout(props) {
               }}
               sx={{
                 "& ul": {
-                  bgcolor:"common.black",
+                  bgcolor:"background.default",
+                  border:"2px solid",
+                  borderColor:"primary.main",
                   p:{lg:3, md:1}
                 }
               }}
@@ -392,12 +444,24 @@ function Layout(props) {
                 <Typography variant="body1">
                   {props.info[1].content.slice(0, 30)}...
                 </Typography>
+                {username && <Button type="button" onClick={()=>{
+                  //navi("/create blog")
+                }}
+                sx={{
+                  textAlign:"center",
+                  width:"100%",
+                  bgcolor:"secondary.main",
+                  color:"text.primary"
+                }} >
+                  Create Blog
+                  </Button>}
             </Menu>
             </span>
             ))}
             
             <Box component="span" sx={{
-              alignContent:"center", 
+              alignContent:"center",
+              alignItems:"center",
               ml:3,
               cursor:"pointer"
             }} 

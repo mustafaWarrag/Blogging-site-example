@@ -10,7 +10,7 @@ let client = new MongoClient(process.env.MONGO_CLUSTER_URL);
 
 async function main() {
     try {
-        await BlogDAO.mongoConnect(client);
+        //await BlogDAO.mongoConnect(client);
         app.listen(PORT, ()=>{
             console.log(`listening at ${PORT}`);
         })

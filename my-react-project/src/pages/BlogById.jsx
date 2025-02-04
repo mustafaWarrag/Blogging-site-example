@@ -1,9 +1,10 @@
 import { Container, Paper, Card, CardMedia, Typography, Divider, CardContent, Avatar, Box, Skeleton } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
-import blogService from "../services/blogService.js"
 import { useEffect, useState } from "react"
 import imgPlaceholder from "../images/woman-holding-camera-1.jpg"
 import { Link, useParams } from "react-router-dom";
+
+import blogRequests from "../requests/blogRequests.js";
 
 let arr = [];
 arr.length = 5;
@@ -24,7 +25,7 @@ export default function BlogById(props) {
     let params = useParams()
 
     function grabBlog(id) {
-        blogService.fetchBlogById(id).then((response) => {
+        blogRequests.fetchBlogById(id).then((response) => {
             //console.log(response.data);
             if (response.data.blog.length < 1) {
                 return setLoading(false);

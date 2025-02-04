@@ -2,7 +2,7 @@ import { Box, Container, FormControl, InputLabel, MenuItem, Paper, Select, Skele
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom"
 
-import blogService from "../services/blogService.js";
+import blogRequests from "../requests/blogRequests.js";
 
 export default function Categories(props) {
     const [loading, setLoading] = useState(true);
@@ -19,7 +19,7 @@ export default function Categories(props) {
     }
 
     function grabTags() {
-        blogService.fetchCategories().then((response)=>{
+        blogRequests.fetchCategories().then((response)=>{
             //console.log(response.data);
             setCategories(["All Tags"].concat(response.data.tags));
             //setLoading(false);
@@ -30,7 +30,7 @@ export default function Categories(props) {
     }
     function grabBlogsByTags(category) {
         if (category === "All Tags") {
-            blogService.fetchAllBlogs().then((response) => {
+            blogRequests.fetchAllBlogs().then((response) => {
                 //console.log(response.data);
                 setInfo(response.data.blogs);
                 setLoading(false)
@@ -39,7 +39,7 @@ export default function Categories(props) {
                 setLoading(false);
             })
         } else {
-            blogService.fetchBlogsByCategories(currentSelection).then((response) => {
+            blogRequests.fetchBlogsByCategories(currentSelection).then((response) => {
                 //console.log(response.data);
                 //console.log(currentSelection);
                 setInfo(response.data.blogs);

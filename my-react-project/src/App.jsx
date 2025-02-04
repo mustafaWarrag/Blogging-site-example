@@ -22,8 +22,12 @@ import Done from './pages/Done.jsx';
 import BlogById from './pages/BlogById.jsx';
 import Contacts from './pages/Contacts.jsx';
 import Categories from './pages/Categories.jsx';
+import Profile from './pages/Profile.jsx';
 
-import blogService from './services/blogService.js';
+import blogRequests from './requests/blogRequests.js';
+
+import { useDispatch } from 'react-redux';
+import { setUser } from './features/userSlice.js';
 
 function ScrollToTop() {
   let location = useLocation();
@@ -34,11 +38,11 @@ function ScrollToTop() {
 }
 
 function App() {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [mode, setMode] = useState("dark");
+  const [anchorEl, setAnchorEl] = useState(null); //state for managing the 
+  const [loading, setLoading] = useState(true); //state for managing whether the component has finished laoding
+  const [mode, setMode] = useState("dark"); //state for managing dark/light mode
   
-  const [info, setInfo] = useState([
+  const [info, setInfo] = useState([ //state for managing the data fetched from the backend
     {
     _id:"000",
     tags:["blog"],
@@ -46,22 +50,8 @@ function App() {
     content:"lorem lorem lorem",
     img:img1
     }
-])
-
-  function grabBlogs() {
-    blogService.fetchAllBlogs().then((response) => {
-      //console.log(response.data.blogs);
-      //let data = response.data.blogs.sort(()=> Math.random()-0.5);
-      setInfo(response.data.blogs.sort(()=> Math.random()-0.5));
-      hideProg();
-    }).catch((err)=>{
-      console.error(err);
-    })
-  }
-
-  function handleOpenNavMenu(e) {
-    setAnchorEl(e.currentTarget);
-  }
+]);
+  //const [open, setOpen] = useState(false);
 
   const darkMode =  createTheme({
     palette:{
@@ -81,14 +71,38 @@ function App() {
     }];
 
     function hideProg() {
-      let prog = document.getElementById("mui-prog");
-      prog.style.display = "none";
       setLoading(false);
     }
+    
+    function grabBlogs() {
+      blogRequests.fetchAllBlogs().then((response) => {
+        //console.log(response.data.blogs);
+        //let data = response.data.blogs.sort(()=> Math.random()-0.5);
+        setInfo(response.data.blogs.sort(()=> Math.random()-0.5));
+        hideProg();
+      }).catch((err)=>{
+        console.error(err);
+        hideProg();
+      })
+    }
+    
+    let dispatch = useDispatch();
+    function checkStorage() {
+      let cookie = JSON.parse(localStorage.getItem("cookie"));
+      if (cookie) {
+        console.log("grabbing from cache");
+        dispatch(setUser({
+          username:cookie.username,
+          token:cookie.token
+        }))
+      } else {
+        console.log("cache not found");
+      }
+    }
+
     useEffect(()=>{
       grabBlogs();
-      //window.addEventListener("load", hideProg);
-      //return ()=> window.removeEventListener("load", hideProg);
+      checkStorage();
     }
     ,[])
 
@@ -99,12 +113,12 @@ function App() {
       <GlobalStyles styles={(theme) => ({
           //body: { backgroundColor:theme.palette.augmentColor, color:theme.palette.primary.main },
         })}/>
-        <LinearProgress id="mui-prog"
-        sx={{
-            position:"absolute", 
-            top:0,
-            width:"100%"
-            }}/>
+        {loading && <LinearProgress id="mui-prog" sx={{
+                position:"absolute", 
+                top:0,
+                width:"100%"
+              }}/>
+        }
         <BrowserRouter>
         <ScrollToTop />
           <Routes>
@@ -115,8 +129,9 @@ function App() {
               <Route path="contact" element={<Contacts />} />
               <Route path="about" element={<About />} />
               <Route path="*" element={<Nopage/>} />
-              <Route path="/contact/done" element={<Done/>} />
+              {/* <Route path="/signup" element={<SignUp open={open} setOpen={setOpen} />} /> */}
               <Route path="categories" element={<Categories />} />
+              <Route path="/profile" element={<Profile />} />
             </Route>
           </Routes>
         </BrowserRouter>
