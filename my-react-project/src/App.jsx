@@ -23,6 +23,7 @@ import BlogById from './pages/BlogById.jsx';
 import Contacts from './pages/Contacts.jsx';
 import Categories from './pages/Categories.jsx';
 import Profile from './pages/Profile.jsx';
+import CreateBlog from './pages/CreateBlog.jsx';
 
 import blogRequests from './requests/blogRequests.js';
 
@@ -91,6 +92,7 @@ function App() {
       let cookie = JSON.parse(localStorage.getItem("cookie"));
       if (cookie) {
         console.log("grabbing from cache");
+        console.log(cookie);
         dispatch(setUser({
           username:cookie.username,
           token:cookie.token
@@ -116,8 +118,8 @@ function App() {
         {loading && <LinearProgress id="mui-prog" sx={{
                 position:"absolute", 
                 top:0,
-                width:"100%"
-              }}/>
+                width:"100%"}}
+              />
         }
         <BrowserRouter>
         <ScrollToTop />
@@ -131,7 +133,8 @@ function App() {
               <Route path="*" element={<Nopage/>} />
               {/* <Route path="/signup" element={<SignUp open={open} setOpen={setOpen} />} /> */}
               <Route path="categories" element={<Categories />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="create-blog" element={<CreateBlog />} />
             </Route>
           </Routes>
         </BrowserRouter>

@@ -1,4 +1,5 @@
-import BlogDAO from "../databaseAccess/blogDAO.js";
+//import BlogDAO from "../databaseAccess/blogDAO.js";
+import Blog from "../models/Blog.js";
 
 export default class BlogsController{
     static async apiGetBlogs(req,res,next) {
@@ -9,7 +10,14 @@ export default class BlogsController{
             if (req.query.tags) {
                 filter.tags = req.query.tags;
             }
-            let {blogList, numOfBlogs} = await BlogDAO.getBlogs({filter:filter, resultsPerPage:resultsPerPage, page:page});
+            let blogList = await Blog.find({filter})
+                                     .limit(resultsPerPage)
+                                     .skip(page);
+            let numOfBlogs = await Blog.countDocuments(filter); 
+            if (!blogList) {
+                throw new Error("blog does not exist");
+            }
+            //let {blogList, numOfBlogs} = await BlogDAO.getBlogs({filter:filter, resultsPerPage:resultsPerPage, page:page});
             let response = {
                 blogs:blogList,
                 filter:filter,
@@ -26,7 +34,8 @@ export default class BlogsController{
         try {
             //let id = req.params.id || "67977d25b89650d6a90efc55";
             let id = req.params.id;
-            let doc = await BlogDAO.getBlogById(id);
+            //let doc = await BlogDAO.getBlogById(id);
+            let doc = await Blog.findOne({_id:id});
             res.json({blog:doc});
         } catch(err) {
             res.status(500).json({message:"error, cant get blog by id: " + err});
@@ -34,7 +43,8 @@ export default class BlogsController{
     }
     static async apiGetTags(req, res, next) {
         try {
-            let tags = await BlogDAO.getTags();
+            //let tags = await BlogDAO.getTags();
+            let tags = await Blog.distinct("tags");
             res.json({tags:tags});
         } catch(err) {
             res.status(500).json({message:"error, cant get tags: " + err});
@@ -44,16 +54,17 @@ export default class BlogsController{
     static async apiCreateBlog(req, res, next) {
         try {
             let author = req.body.author;
-            //let authorId = req.body.authorId;
+            let authorId = req.body.authorId;
             let title = req.body.title || "default blog title"
             let content = req.body.content || "Lorem lorem lorem lorem";
             let img = req.body.img || "";
             let imgLink = req.body.imgLink || "";
             let date = req.body.date || new Date();
             let tags = req.body.tags || [];
-            BlogDAO.createBlog({
+            //BlogDAO.createBlog({
+            let newBlog = new Blog({
                 author:author,
-                //authorId:authorId, 
+                authorId:authorId, 
                 title:title,
                 content:content,
                 img:img,
@@ -61,6 +72,7 @@ export default class BlogsController{
                 date:date,
                 tags:tags
             });
+            newBlog.save();
             res.json({status:"successfully created a blog"});
 
         } catch(err) {
@@ -73,7 +85,9 @@ export default class BlogsController{
             let authorId = req.body.authorId;
             let title = req.body.title;
             let content = req.body.content;
-            let updatedDoc = await BlogDAO.updateBlog(id, authorId, title, content);
+            //let updatedDoc = await BlogDAO.updateBlog(id, authorId, title, content);
+            let updatedDoc = await Blog.updateOne(
+                {_id:id, authorId:authorId}, {title:title, content:content})
             res.json({status:"successfully updated blog"});
         } catch(err) {
             res.status(500).json({message:"failed to update blog: " + err});
@@ -83,7 +97,8 @@ export default class BlogsController{
         try {
             let id = req.body.id;
             let authorId = req.body.authorId;
-            await BlogDAO.deleteBlog(id, authorId);
+            //await BlogDAO.deleteBlog(id, authorId);
+            let deleteDoc = Blog.deleteOne({_id:id, authorId:authorId})
             res.json({status:"successfully deleted blog"});
         } catch(err) {
             res.status(500).json({message:"failed to delet blog: " + err})

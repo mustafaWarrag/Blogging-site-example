@@ -5,7 +5,8 @@ import cuid2 from "@paralleldrive/cuid2";
 const Blog = mongoosey.model("Blog", {
     _id:{type:String, default:(new ObjectId().toString())},
     author:{type:String, required:true},
-    authorId:{type:String, default:cuid2.createId()},
+    //authorId:{type:String, default:cuid2.createId()},
+    authorId:{type:String, required:true},
     title:{type:String, required:true},
     content:{type:String, required:true},
     img:String,

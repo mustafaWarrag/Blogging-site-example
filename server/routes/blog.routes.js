@@ -1,11 +1,12 @@
 import express from "express"
 import BlogsController from "../controllers/blogsController.js";
+import blogMiddleware from "../middleware/blogMiddleware.js";
 
 let router = express.Router();
 
 router.route("/")
                  .get(BlogsController.apiGetBlogs)
-                 .post(BlogsController.apiCreateBlog)
+                 .post(blogMiddleware.tokenVerified, BlogsController.apiCreateBlog)
                  .put(BlogsController.apiUpdateBlog)
                  .delete(BlogsController.apiDeleteBlog);
 

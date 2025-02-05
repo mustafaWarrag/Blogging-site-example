@@ -292,9 +292,7 @@ function Layout(props) {
                     }} 
                     sx={{
                       color:"text.primary",
-                      m:1,
-                      mr:0,
-                      ml:"-9px",
+                      m:1, mr:0, ml:"-9px",
                       fontSize:{lg:"1.0rem", md:"0.8rem"}
                     }}>
                       Profile
@@ -445,7 +443,7 @@ function Layout(props) {
                   {props.info[1].content.slice(0, 30)}...
                 </Typography>
                 {username && <Button type="button" onClick={()=>{
-                  //navi("/create blog")
+                  navi("/create-blog")
                 }}
                 sx={{
                   textAlign:"center",

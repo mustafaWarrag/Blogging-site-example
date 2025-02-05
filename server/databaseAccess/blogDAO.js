@@ -1,7 +1,9 @@
 import Blog from "../models/Blog.js";
 
-let blogs;
-export default class BlogDAO {
+//let blogs;
+/*
+//export default 
+class BlogDAO {
     if(blogs) {
             return blogs
     }
@@ -85,3 +87,4 @@ export default class BlogDAO {
         }
     }
 }
+*/

@@ -18,4 +18,9 @@ export default class blogRequests {
         //return await axios.get(`http://localhost:8080/api/v1/blogs?tags=${tags}&resultsPerPage=${resultsPerPage}&page=${page}`);
         return await axios.get(`https://blogging-site-example.onrender.com/api/v1/blogs?tags=${tags}&resultsPerPage=${resultsPerPage}&page=${page}`);
     }
+
+    static async createBlog(data, token) {
+        return await axios.post("http://localhost:8080/api/v1/blogs", data, {
+        headers:{Authorization:token}})
+    }
 }
