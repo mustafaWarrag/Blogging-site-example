@@ -9,6 +9,7 @@ import Login from './Login.jsx';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../features/userSlice.js';
+import userRequests from '../requests/userRequests.js';
 
 let navItems = [
     {name:"home", link:"/"}, {name:"categories", link:"/categories"}, 
@@ -53,7 +54,10 @@ function Layout(props) {
     setDrawer(bool);
   }
 
+  
+
   useEffect(()=> {
+    //tokenVerify();
     window.addEventListener("scroll", handleMouseLeave);
     return ()=> window.removeEventListener("scroll", handleMouseLeave);
   }

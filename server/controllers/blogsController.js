@@ -10,7 +10,10 @@ export default class BlogsController{
             if (req.query.tags) {
                 filter.tags = req.query.tags;
             }
-            let blogList = await Blog.find({filter})
+            if (req.body.authorId) {
+                filter.authorId = req.body.authorId; 
+            }
+            let blogList = await Blog.find(filter)
                                      .limit(resultsPerPage)
                                      .skip(page);
             let numOfBlogs = await Blog.countDocuments(filter); 
@@ -72,7 +75,7 @@ export default class BlogsController{
                 date:date,
                 tags:tags
             });
-            newBlog.save();
+            await newBlog.save();
             res.json({status:"successfully created a blog"});
 
         } catch(err) {

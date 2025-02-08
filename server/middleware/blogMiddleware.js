@@ -5,14 +5,12 @@ export default class blogMiddleware {
         if (!token) {
             throw new Error("token does not exist");
         }
-        let verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        if (!verified) {
-            throw new Error("token invalid");
-        }
-        jwt.decode(token, (err, decoded) => {
+        
+        jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
             if (err) {
-                throw new Error("Decoding token failed");
+                throw new Error("invalid token");
             }
+            //console.log(decoded);
             req.body.authorId = decoded._id //the _id refers to the user's _id field
         })
         next();

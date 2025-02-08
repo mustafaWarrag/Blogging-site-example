@@ -12,4 +12,5 @@ router.route("/")
 
 router.route("/id/:id").get(BlogsController.apiGetBlogById);
 router.route("/tags").get(BlogsController.apiGetTags);
+router.route("/author?").get(blogMiddleware.tokenVerified, BlogsController.apiGetBlogs);
 export default router;

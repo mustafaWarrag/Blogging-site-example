@@ -26,12 +26,13 @@ export default function Footer(props) {
           <Typography variant="body1" sx={{
             fontWeight:"300",
             color:"text.primary",
-            textAlign:"center"
+            textAlign:"center",
+            mr:3
             //flexGrow:{md:0, xs:1}
           }}>
             A Web Developer
           </Typography>
-          <ButtonGroup aria-label="Basic button group">
+          <ButtonGroup aria-label="Basic button group" sx={{mr:2}}>
             {props.socialMediaIcons.map((val,ind)=>(
               <Button key={ind} title={val.title} href={val.ref} target="_blank"
               sx={{

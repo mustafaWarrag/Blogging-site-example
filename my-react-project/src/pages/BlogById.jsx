@@ -30,7 +30,7 @@ export default function BlogById(props) {
             if (response.data.blog.length < 1) {
                 return setLoading(false);
             } else {
-                setInfo(response.data.blog[0]);
+                setInfo(response.data.blog);
             }
             setLoading(false);
         }).catch((err)=>{
@@ -104,7 +104,7 @@ export default function BlogById(props) {
                 pt:{md:3, xs:0}
                 }}>
             <Card>
-                <CardMedia image={info.img} component="img" title={info.imgLink} 
+                <CardMedia image={info.img? info.img : imgPlaceholder} component="img" title={info.imgLink} 
                 sx={{
                     height:"500px",
                     backgroundSize:"cover",
@@ -198,7 +198,7 @@ export default function BlogById(props) {
                             fontFamily:"monospace"
                         }}>
                             {info.author} is a charcter from the famous Georage R.R. Martin Novel "A Song Of Ice And Fire". 
-                            These Blog entries serve only as a parody for demostration purposes, the rights belong to the man himself
+                            These author names serve only as a parody for demostration purposes, the rights belong to the man himself
                         </Typography>
                     </Paper>
                     <br/>

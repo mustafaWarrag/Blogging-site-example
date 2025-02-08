@@ -10,5 +10,6 @@ userRouter.route("/").get(userController.apiGetUsers)
 userRouter.route("/id/:id").get(userController.apiGetUserById);
 userRouter.route("/signin").post(userController.apiHandleSignin);
 userRouter.route("/profile").get(userMiddleware.tokenVerify, userController.apiGetUserById);
+userRouter.route("/home").get(userMiddleware.tokenVerify, userMiddleware.homeVerify);
 
 export default userRouter

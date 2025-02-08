@@ -27,8 +27,9 @@ import CreateBlog from './pages/CreateBlog.jsx';
 
 import blogRequests from './requests/blogRequests.js';
 
-import { useDispatch } from 'react-redux';
-import { setUser } from './features/userSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser, logout } from './features/userSlice.js';
+import userRequests from './requests/userRequests.js';
 
 function ScrollToTop() {
   let location = useLocation();
@@ -76,31 +77,47 @@ function App() {
     }
     
     function grabBlogs() {
+      setLoading(true);
       blogRequests.fetchAllBlogs().then((response) => {
         //console.log(response.data.blogs);
         //let data = response.data.blogs.sort(()=> Math.random()-0.5);
         setInfo(response.data.blogs.sort(()=> Math.random()-0.5));
-        hideProg();
       }).catch((err)=>{
         console.error(err);
-        hideProg();
+      }).finally(()=>{
+        setLoading(false);
       })
     }
     
     let dispatch = useDispatch();
+    
+    
+
     function checkStorage() {
       let cookie = JSON.parse(localStorage.getItem("cookie"));
       if (cookie) {
-        console.log("grabbing from cache");
-        console.log(cookie);
-        dispatch(setUser({
-          username:cookie.username,
-          token:cookie.token
-        }))
+        //check if the cache token hasn't expired
+        userRequests.tokenAuthentication(cookie.token).then((response)=>{
+          console.log("grabbing from cache");
+          console.log(cookie);
+          dispatch(setUser({
+            username:cookie.username,
+            token:cookie.token
+            }))
+        }).catch((err)=> {
+          console.error("bad token" + err);
+          //if token is invalid, logout and clear storage
+          dispatch(logout());
+          localStorage.clear();
+        })
       } else {
+        //if there was no cache to begin with
         console.log("cache not found");
       }
     }
+
+    const token = useSelector((store) => store.info.token);
+
 
     useEffect(()=>{
       grabBlogs();
