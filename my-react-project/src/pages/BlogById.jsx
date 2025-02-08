@@ -61,10 +61,14 @@ export default function BlogById(props) {
 
     useEffect(()=>{
         grabBlog(params.id);
-        document.title = info.title;
+        //document.title = info.title;
         window.addEventListener("scroll", detectScroll);
         return () => window.removeEventListener("scroll", detectScroll)
-    },[])
+    },[]);
+
+    useEffect(()=>{
+        document.title = info.title; //change the website title when data is grabbed
+    },[info]);
 
     if (loading) {
         return (

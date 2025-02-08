@@ -86,7 +86,8 @@ export default function Profile(props) {
                 let date = response.data.registerDate;
                 registerDate = date;
             }).catch((err) => {
-                console.error("bad token "+ err);
+                //console.error("bad token "+ err);
+                console.error("bad token");
                 useDispatch(logout());
                 localStorage.clear();
                 registerDate = Date.now();
@@ -95,7 +96,7 @@ export default function Profile(props) {
       }
       function getOwnBlogs() {
         blogRequests.fetchBlogsByAuthor(token).then((response) => {
-            console.log(response.data);
+            //console.log(response.data);
             setInfo(response.data.blogs);
             setInfoLoading(false);
         }).catch((err) => {

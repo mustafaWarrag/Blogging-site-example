@@ -40,7 +40,7 @@ export default function Login(props) {
         token:token
       }));
       localStorage.setItem("cookie", JSON.stringify({username:username, token:token}));
-      setTimeout(()=> console.log(user + " token: " + token), "1000");
+      //setTimeout(()=> console.log(user + " token: " + token), "1000");
     }
 
     //let token = "placeholder";
