@@ -26,6 +26,6 @@ export default class blogRequests {
 
     static async createBlog(data, token) {
         //return await axios.post("http://localhost:8080/api/v1/blogs", data, {headers:{Authorization:token}});
-        return await axios.get("https://blogging-site-example.onrender.com/api/v1/blogs", data, {headers:{Authorization:token}} );
+        return await axios.post("https://blogging-site-example.onrender.com/api/v1/blogs", data, {headers:{Authorization:token}} );
     }
 }

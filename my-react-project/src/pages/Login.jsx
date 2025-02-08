@@ -66,8 +66,10 @@ export default function Login(props) {
       })
     }
     useEffect(()=>{
-        document.title = "Login"
-      },[]);
+      if (props.open) {
+          document.title = "Login"
+        }
+      },[props.open]);
     
 
     return (
