@@ -2,7 +2,7 @@ import { Box, Button, CircularProgress, Container, IconButton, Snackbar, styled,
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Filter } from "bad-words"
 
 import blogRequest from "../requests/blogRequests.js"
@@ -75,7 +75,7 @@ export default function CreateBlog(props) {
             throw new Error("invalid token");
         }
         blogRequest.createBlog(data, token).then((response)=> {
-            console.log(response.data);
+            //console.log(response.data);
             console.log("success");
             setLoading(false);
             navi("/");
@@ -85,6 +85,9 @@ export default function CreateBlog(props) {
             throw new Error("failed to submit token");
         })
     }
+        useEffect(()=>{
+            document.title = "Create Blog"
+        },[]);
     
     if (!username) {
         return (

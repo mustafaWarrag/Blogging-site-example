@@ -57,6 +57,7 @@ export default function Categories(props) {
     }
 
     useEffect(()=>{
+        document.title = "Categories"
         grabTags();
     },[]);
 

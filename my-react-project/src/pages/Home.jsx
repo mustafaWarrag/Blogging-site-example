@@ -6,9 +6,13 @@ import { Container} from '@mui/material';
 
 import img1 from "../images/young-woman-laptop-window.jpg";
 import img2 from "../images/woman-holding-camera-2.jpeg";
+import { useEffect } from "react";
 
 export default function Home(props) {
   let navi = useNavigate();
+  useEffect(()=>{
+    document.title = "Home"
+  },[]);
 
   if (props.loading) {
     return (

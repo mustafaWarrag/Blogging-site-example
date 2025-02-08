@@ -99,7 +99,7 @@ function App() {
         //check if the cache token hasn't expired
         userRequests.tokenAuthentication(cookie.token).then((response)=>{
           console.log("grabbing from cache");
-          console.log(cookie);
+          //console.log(cookie);
           dispatch(setUser({
             username:cookie.username,
             token:cookie.token

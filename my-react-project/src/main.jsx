@@ -5,6 +5,7 @@ import App from './App.jsx'
 import { Provider } from 'react-redux'
 import store from './features/store.js'
 
+/*
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props)
@@ -18,6 +19,7 @@ class ErrorBoundary extends Component {
     console.error()
   }
 }
+*/
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

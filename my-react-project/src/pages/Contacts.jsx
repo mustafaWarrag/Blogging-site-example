@@ -15,7 +15,7 @@ export default function Contacts(props) {
   };
 
   useEffect(()=> {
-    
+    document.title = "Contact Us"
   },[])
 
   return (

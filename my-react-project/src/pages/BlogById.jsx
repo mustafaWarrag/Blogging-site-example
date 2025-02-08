@@ -61,6 +61,7 @@ export default function BlogById(props) {
 
     useEffect(()=>{
         grabBlog(params.id);
+        document.title = info.title;
         window.addEventListener("scroll", detectScroll);
         return () => window.removeEventListener("scroll", detectScroll)
     },[])

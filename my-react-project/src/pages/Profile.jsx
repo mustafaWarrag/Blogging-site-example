@@ -58,12 +58,12 @@ export default function Profile(props) {
         
         userRequests.createAccount(data).then((response) => {
           console.log("account was created sucessfully");
-          console.log(response.data);
+          //console.log(response.data);
           //handleClosing();
           handleDispatching(data.username, token); 
           setLoading(false);
         }).catch((err) => {
-          console.error(err);
+          console.error("err");
           setError("Unable to create account, try again");
           setLoading(false);
         })
@@ -104,6 +104,7 @@ export default function Profile(props) {
         })
       }
       useEffect(()=>{
+        document.title = "Profile";
         profileView();
         getOwnBlogs();
       },[])

@@ -1,6 +1,6 @@
 import { CloseRounded } from "@mui/icons-material";
 import { Box, Button, CircularProgress, Modal, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -55,16 +55,19 @@ export default function Login(props) {
 
       userRequests.signUser(data).then((response) => {
         console.log("logged in successfully");
-        console.log(response.data);
+        //console.log(response.data);
         handleDispatching(data.username, response.data.token)
         handleClosing();
         setLoading(false);
       }).catch((err) => {
-        console.error("unable to login " + err);
+        console.error("unable to login");
         setError(true)
         setLoading(false);
       })
     }
+    useEffect(()=>{
+        document.title = "Login"
+      },[]);
     
 
     return (
