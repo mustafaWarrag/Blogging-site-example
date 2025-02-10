@@ -1,12 +1,15 @@
+import { useEffect } from "react";
 import { Link, } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import { Button, Card, CardMedia, CardContent, Stack } from '@mui/material';
 import { Box, Typography, Paper, Divider, Grid2, Skeleton } from "@mui/material";
 import { Container} from '@mui/material';
 
+import Login from "./Login.jsx";
+
 import img1 from "../images/young-woman-laptop-window.jpg";
 import img2 from "../images/woman-holding-camera-2.jpeg";
-import { useEffect } from "react";
+
 
 export default function Home(props) {
   let navi = useNavigate();
@@ -45,6 +48,9 @@ export default function Home(props) {
       backgroundColor:"#555",
       backgroundBlendMode:"overlay",
     }}>
+
+      <Login open={props.open} setOpen={props.setOpen} />
+
       <Box sx={{
         p:10,
         display:"flex",

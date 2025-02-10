@@ -2,6 +2,7 @@ import { Box, Card, CardMedia, Container, Typography } from "@mui/material";
 import imgAbout1 from "../images/man-with-headset.jpg"
 import imgAbout2 from "../images/two-women-talking.jpg"
 import imgAbout3 from "../images/woman-holding-tablet.jpg"
+import { useEffect } from "react";
 
 let imgArray = [imgAbout1, imgAbout2, imgAbout3];
 let headerArray = [
@@ -10,6 +11,9 @@ let headerArray = [
 let titlesArray = ["man wearing a headset", "two women talking", "a woman holding a tablet"]
 
 export default function About(props) {
+    useEffect(()=>{
+        document.title = "About";
+    },[])
     return (
         <Container maxWidth="xl" sx={{p:5}}>
             <Box sx={{textAlign:"center", mb:3}}>

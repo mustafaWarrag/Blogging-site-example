@@ -12,6 +12,12 @@ export default class userMiddleware {
             }
             req.body.id = decoded._id; // "decoded" refers to the payload
             console.log("correct token!");
+            /*
+            I use the token as both an authorization method
+            and as an easy way to have access to the _id field of both
+            blogs and users.
+            That is the reason why most api calls have this request handler as middleware
+            */
             next() //send to the next handler
         })
     }

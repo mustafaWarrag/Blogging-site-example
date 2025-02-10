@@ -26,6 +26,14 @@ export default class blogRequests {
 
     static async createBlog(data, token) {
         //return await axios.post("http://localhost:8080/api/v1/blogs", data, {headers:{Authorization:token}});
-        return await axios.post("https://blogging-site-example.onrender.com/api/v1/blogs", data, {headers:{Authorization:token}} );
+        return await axios.post("https://blogging-site-example.onrender.com/api/v1/blogs", data, {headers:{Authorization:token}});
+    }
+    static async deleteBlog(blogId, token) {
+        //return await axios.delete("http://localhost:8080/api/v1/blogs", {data: {id:blogId}, headers:{Authorization:token}});
+        return await axios.delete("https://blogging-site-example.onrender.com/api/v1/blogs", {data: {id:blogId}, headers:{Authorization:token}});
+    }
+    static async editBlog(data, token) {
+        //return await axios.put("http://localhost:8080/api/v1/blogs", data, {headers:{Authorization:token}});
+        return await axios.put("https://blogging-site-example.onrender.com/api/v1/blogs", data, {headers:{Authorization:token}});
     }
 }

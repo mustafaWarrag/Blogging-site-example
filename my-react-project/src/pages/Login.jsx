@@ -74,12 +74,8 @@ export default function Login(props) {
 
     return (
         <>
-            <Modal 
-            open={props.open} 
-            onClose={handleClosing} 
-            aria-labelledby='modal-text'
-            aria-describedby='modal-desc' 
-            disableScrollLock
+            <Modal open={props.open} onClose={handleClosing} 
+            aria-labelledby='modal-text' aria-describedby='modal-desc' disableScrollLock
             sx={{
                 display:"flex",
                 flexDirection:"column", flexWrap:"wrap",
@@ -100,8 +96,7 @@ export default function Login(props) {
                 top:{md:"15%", xs:"17%"},
                 right:{md:"16%", xs:"10%"},
                 alignItems:"center",
-                pb:0,
-                pl:0,pr:0
+                pb:0, pl:0,pr:0
                 }}>
               <CloseRounded component="svg" />
             </Button>
@@ -116,9 +111,8 @@ export default function Login(props) {
               id="password-field" name="password" type="password" label="Password" required 
               margin="normal" />
               <br/>
-              {error? (
-                <Typography sx={{color:"error.main"}} >Unable To log in, try again</Typography>
-              ) : (null) }
+              {error &&
+                <Typography sx={{color:"error.main"}} >Unable To log in, try again</Typography> }
               <br/>
               <Box>
                 <Button type='button' onClick={()=>{
@@ -127,8 +121,7 @@ export default function Login(props) {
                   //navi("/profile");
                 }}
                 sx={{
-                  bgcolor:"secondary.dark",
-                  color:"common.black",
+                  bgcolor:"secondary.dark", color:"common.black",
                   width:{md:"40%", xs:"60%"},
                   fontSize:{xs:"0.8rem"}
                 }}>
@@ -143,8 +136,7 @@ export default function Login(props) {
                   navi("/profile");
                 }}
                 sx={{
-                  bgcolor:"primary.light",
-                  color:"common.black",
+                  bgcolor:"primary.light", color:"common.black",
                   mt:2
                   }}>
                   Don't have an account? Sign up here

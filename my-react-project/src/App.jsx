@@ -53,7 +53,7 @@ function App() {
     img:img1
     }
 ]);
-  //const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); //for managing the sign-up modal
 
   const darkMode =  createTheme({
     palette:{
@@ -98,14 +98,14 @@ function App() {
       if (cookie) {
         //check if the cache token hasn't expired
         userRequests.tokenAuthentication(cookie.token).then((response)=>{
-          console.log("grabbing from cache");
+          //console.log("grabbing from cache");
           //console.log(cookie);
           dispatch(setUser({
             username:cookie.username,
             token:cookie.token
             }))
         }).catch((err)=> {
-          console.error("bad token" + err);
+          console.error("bad token");
           //if token is invalid, logout and clear storage
           dispatch(logout());
           localStorage.clear();
@@ -117,7 +117,6 @@ function App() {
     }
 
     const token = useSelector((store) => store.info.token);
-
 
     useEffect(()=>{
       grabBlogs();
@@ -133,7 +132,7 @@ function App() {
           //body: { backgroundColor:theme.palette.augmentColor, color:theme.palette.primary.main },
         })}/>
         {loading && <LinearProgress id="mui-prog" sx={{
-                position:"absolute", 
+                position:"fixed", 
                 top:0,
                 width:"100%"}}
               />
@@ -141,17 +140,16 @@ function App() {
         <BrowserRouter>
         <ScrollToTop />
           <Routes>
-            <Route path="/" element={<Layout mode={mode} setMode={setMode} info={info} loading={loading} />}>
-              <Route index element={<Home loading={loading} socialMediaIcons={socialMediaIcons} info={info} />} />
+            <Route path="/" element={<Layout mode={mode} setMode={setMode} info={info} loading={loading} open={open} setOpen={setOpen} />}>
+              <Route index element={<Home loading={loading} socialMediaIcons={socialMediaIcons} info={info} open={open} setOpen={setOpen} />} />
               <Route path="blog" element={<BlogOne loading={loading} image={imgBlog} />} />
               <Route path="blog/id/:id" element={<BlogById />} />
               <Route path="contact" element={<Contacts />} />
               <Route path="about" element={<About />} />
               <Route path="*" element={<Nopage/>} />
-              {/* <Route path="/signup" element={<SignUp open={open} setOpen={setOpen} />} /> */}
               <Route path="categories" element={<Categories />} />
-              <Route path="profile" element={<Profile />} />
-              <Route path="create-blog" element={<CreateBlog />} />
+              <Route path="profile" element={<Profile setOpen={setOpen} />} />
+              <Route path="create-blog" element={<CreateBlog setLoading={setLoading} />} />
             </Route>
           </Routes>
         </BrowserRouter>

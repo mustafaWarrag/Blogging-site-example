@@ -1,30 +1,20 @@
 import { Component, StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { ErrorBoundary } from "react-error-boundary"
 import './index.css'
 import App from './App.jsx'
+
 import { Provider } from 'react-redux'
 import store from './features/store.js'
 
-/*
-class ErrorBoundary extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {error:false, errorInfo:""}
-  }
-  static getDerviedStateFromError(error) {
-    return {error:true}
-  }
-  componentDidCatch(error, errorInfo) {
-    this.setState({errorInfo})
-    console.error()
-  }
-}
-*/
+import ErrorFallback from './pages/ErrorFallback.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
-      <App />
+      <ErrorBoundary fallback={<ErrorFallback />}>
+        <App />
+      </ErrorBoundary>
     </Provider>
   </StrictMode>,
 )

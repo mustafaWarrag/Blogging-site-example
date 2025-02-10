@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Container, IconButton, Snackbar, styled, TextField, Typography } from "@mui/material";
+import { Alert, Backdrop, Box, Button, CircularProgress, Collapse, Container, IconButton, Snackbar, styled, TextField, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Filter } from "bad-words"
 
 import blogRequest from "../requests/blogRequests.js"
-import { ContentCopy } from "@mui/icons-material";
+import { CloseTwoTone, ContentCopy } from "@mui/icons-material";
 
 const MyBox = styled(Box)(({theme})=> ({
     display:"flex",
@@ -16,23 +16,14 @@ const MyBox = styled(Box)(({theme})=> ({
 
 
 export default function CreateBlog(props) {
-    //install Morgan to track fetch requests [done]
-    //install Redux for global state management, particularly for user authentication
-    //configure backend code for accepting Sign-up authentication  [done]
-    //encrypt user passwords with bcrypt [done]
-    //use JWT for generating tokens after sign-in [done]
-    //figure out a way to make passwords be at least 6 characters [done-ish]
-    //implement a way so that when signing up, the user is given a token and automatically navigates to "/profile"
-    //and then store the token in the global state [done]
-
-    //require the user being "admin" in order to fetch all users
-
-    const [inputs, setInputs] = useState({});
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [inputs, setInputs] = useState({}); //to hanlde input fields
+    const [error, setError] = useState(""); //to display error messages
+    const [loading, setLoading] = useState(false); //to display loading indicators when fetch/posting data to the backend
     const [open, setOpen] = useState(false); //to handle snackbar
-    const username = useSelector((store) => store.info.username);
-    const token = useSelector((store) => store.info.token);
+    const [alertOpen, setAlertOpen] = useState(false); //to handle the success alert
+
+    const username = useSelector((store) => store.info.username); //global username state
+    const token = useSelector((store) => store.info.token); //global token state
     let navi = useNavigate();
 
     let filter = new Filter();
@@ -58,6 +49,11 @@ export default function CreateBlog(props) {
     }
 
     function submitBlog() {
+        if (!inputs.title || !inputs.content) {
+            setError("Fill the input fields");
+            setLoading(false);
+            throw new Error("empty input fields");
+        }
         let data = {
             author:username,
             //authorId:"" this value is covered by the decoded token
@@ -74,16 +70,36 @@ export default function CreateBlog(props) {
             setError("invalid sign in");
             throw new Error("invalid token");
         }
+        props.setLoading(true);
         blogRequest.createBlog(data, token).then((response)=> {
             //console.log(response.data);
             console.log("success");
             setLoading(false);
-            navi("/");
+            setAlertOpen(true);
+            setTimeout(()=>{
+                props.setLoading(false);
+                navi("/profile");
+            }, 2000)
         }).catch((err) => {
             setLoading(false);
+            props.setLoading(false);
             console.error(err);
             throw new Error("failed to submit token");
         })
+    }
+
+    let time;    
+    function inputErrorHandler(e) {
+        return;
+        clearTimeout(time);
+        setError("");
+        time = setTimeout(()=>{
+            if (e.target.value.length < 15) {
+                setError("Input is too short");
+            } else {
+                setError("");
+            }
+        }, 3000)
     }
         useEffect(()=>{
             document.title = "Create Blog"
@@ -116,10 +132,14 @@ export default function CreateBlog(props) {
                         Write Your own Blog
                     </Typography>
                     <TextField value={inputs.title || ""} onChange={handleInputs}
-                    id="title" name="title" label="title" margin="normal" sx={{width:"60%"}} />
+                    id="title" name="title" label="title" margin="normal" required
+                    sx={{width:"60%"}} 
+                    onInput={inputErrorHandler}/>
                     
-                    <TextField value={inputs.content || ""} onChange={handleInputs}
-                    id="content" name="content" label="content" margin="normal" multiline minRows={6}  />
+                    <TextField value={inputs.content || ""} onChange={handleInputs} 
+                    id="content" name="content" label="content" margin="normal" multiline minRows={6} 
+                    helperText="Minimum 100 words" required placeholder="Click the Clipboard icon to copy Lorem Ipsum into your clipboard"
+                    />
                     <Box sx={{mb:2}}>
                         <IconButton title="click to copy lorem" onClick={()=>{
                             navigator.clipboard.writeText(lorem).then(()=>{
@@ -140,25 +160,30 @@ export default function CreateBlog(props) {
                     onClick={()=>{
                         setLoading(true);
                         submitBlog();
-                        //navi("/");
-                        // for tomorrow:
-                        //display an error if an error exists
-                        //display a success message
-                        //fix the submitBLog function, there is a validation error requiring
-                        //the authorId
-                        //which means that the token verify stuff may not work
-                        //or maybe it does, try it tomorrow
                     }}>
-                        {loading && 
-                            <CircularProgress variant="indeterminate" size="30px" sx={{mr:1}} 
-                        />}
                         Submit blog!
                     </Button>
+                    {loading && <Backdrop open={loading}>
+                            <CircularProgress variant="indeterminate" size="90px" sx={{mr:1}} /> 
+                        </Backdrop>}
                     {error && <Typography color="error.main">
-                        Title or content contain bad words, please change them
+                        {error}
                         </Typography>
                         }
                 </MyBox>
+                <Box>
+                    <Collapse in={alertOpen}>
+                        <Alert severity="success" action={
+                            <IconButton aria-label="close" color="inherit" size="small"
+                            onClick={()=>{
+                                setAlertOpen(false);
+                                }}>
+                                <CloseTwoTone />
+                            </IconButton>
+                        }>Successfully created blog! returning to profile...
+                        </Alert>
+                    </Collapse>
+                </Box>
             </Container>
         </>
     )

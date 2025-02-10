@@ -29,11 +29,11 @@ function SwitchMode(props) {
 
 function Layout(props) {
   const [anchorEl, setAnchorEl] = useState(null);
-  let [drawerOpen, setDrawer] = useState(false);
+  let [drawerOpen, setDrawer] = useState(false); //state for managing the drawer
   let opened = Boolean(anchorEl);
   let navi = useNavigate();
   
-  const [open, setOpen] = useState(false); //state for managing the sign-up modal
+  //const [open, setOpen] = useState(false); //state for managing the sign-up modal
   
   const username = useSelector((store) => store.info.username);
   const dispatch = useDispatch()
@@ -256,7 +256,7 @@ function Layout(props) {
                       ml:"-9px"
                     }} 
                     onClick={()=>{
-                      setOpen(true);
+                      props.setOpen(true);
                       setDrawer(false);
                     }}>Login
                     </Button>
@@ -305,9 +305,8 @@ function Layout(props) {
                     <>
                       <Button sx={{color:"text.primary"}}
                       onClick={()=>{
-                        setOpen(true);
+                        props.setOpen(true);
                       }}>Login</Button>
-                      <Login open={open} setOpen={setOpen} />
                     </>
                   )}
             {navItems.map((val,index)=> (

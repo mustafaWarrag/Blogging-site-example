@@ -39,6 +39,9 @@ export default class BlogsController{
             let id = req.params.id;
             //let doc = await BlogDAO.getBlogById(id);
             let doc = await Blog.findOne({_id:id});
+            if (!doc) {
+                throw new Error("blog does not exist");
+            }
             res.json({blog:doc});
         } catch(err) {
             res.status(500).json({message:"error, cant get blog by id: " + err});
@@ -101,10 +104,14 @@ export default class BlogsController{
             let id = req.body.id;
             let authorId = req.body.authorId;
             //await BlogDAO.deleteBlog(id, authorId);
-            let deleteDoc = Blog.deleteOne({_id:id, authorId:authorId})
+            let deleteDoc = await Blog.deleteOne({_id:id, authorId:authorId});
+            if (!deleteDoc) {
+                throw new Error("Unable to find blog");
+            }
+
             res.json({status:"successfully deleted blog"});
         } catch(err) {
-            res.status(500).json({message:"failed to delet blog: " + err})
+            res.status(500).json({message:"failed to delete blog: " + err})
         }
     }
 } 

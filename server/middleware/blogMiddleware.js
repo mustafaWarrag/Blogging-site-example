@@ -12,6 +12,12 @@ export default class blogMiddleware {
             }
             //console.log(decoded);
             req.body.authorId = decoded._id //the _id refers to the user's _id field
+            /*
+            I use the token as both an authorization method
+            and as an easy way to have access to the _id field of both
+            blogs and users.
+            That is the reason why most api calls have this request handler as middleware
+            */
         })
         next();
     }

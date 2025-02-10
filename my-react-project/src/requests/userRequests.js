@@ -18,7 +18,7 @@ export default class userRequests {
     }
     static async fetchUserById(id) {
         //return await axios.get(`http://localhost:8080/api/v1/users/id/:${id}`); 
-        return await axios.get("https://blogging-site-example.onrender.com/api/v1/users");
+        return await axios.get(`https://blogging-site-example.onrender.com/api/v1/users/id/:${id}`);
     }
     static async viewProfile(token) {
         //return await axios.get(`http://localhost:8080/api/v1/users/profile/`, {headers:{Authorization:token}}); 

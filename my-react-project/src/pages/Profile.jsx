@@ -1,24 +1,27 @@
-import { Box, Button, Container, Paper, Skeleton, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, CircularProgress, Collapse, Container, IconButton, Paper, Skeleton, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
+import { CheckCircleOutline, DeleteTwoTone, EditNoteTwoTone } from "@mui/icons-material";
 import { Filter } from "bad-words";
 
 import userRequests from "../requests/userRequests.js";
+import blogRequests from "../requests/blogRequests.js";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, logout } from "../features/userSlice.js";
-import blogRequests from "../requests/blogRequests.js";
+
+import EditBlog from "./EditBlog.jsx";
 
 export default function Profile(props) {
-    const [info, setInfo] = useState([{
-        //title:"Default Title Placeholder",
-        //content:"Lorem Lorem Lorem Lorem Lorem",
-        //tags:["Blog", "Default"]
-    }]);
-    const [infoLoading, setInfoLoading] = useState(true);
-    const [inputs, setInputs] = useState({});
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [info, setInfo] = useState([{}]); //returns null if no blogs were found
+    const [infoLoading, setInfoLoading] = useState(true); //loading state of the blogs
+    const [inputs, setInputs] = useState({}); //to handle input fields when registering
+    const [error, setError] = useState(""); //to handle errors of input
+    const [loading, setLoading] = useState(false); //loading indicator for when the user account 
+
+    const [modalOpen, setModal] = useState(false); //to handle the EditBlog component
+    
+    const [alertOpen, setAlert] = useState(""); //to handle the edit/delete alert
 
     const username = useSelector((store)=> store.info.username);
     const token = useSelector((store)=> store.info.token);
@@ -94,7 +97,9 @@ export default function Profile(props) {
             })
         }
       }
+      
       function getOwnBlogs() {
+        setInfoLoading(true);
         blogRequests.fetchBlogsByAuthor(token).then((response) => {
             //console.log(response.data);
             setInfo(response.data.blogs);
@@ -104,16 +109,44 @@ export default function Profile(props) {
             setInfoLoading(false);
         })
       }
-      useEffect(()=>{
-        document.title = "Profile";
-        profileView();
-        getOwnBlogs();
-      },[])
+
+      const [currentBlogId, setBlogId] = useState("1"); //to handle which blog to edit currently
+      function editBlog(blogId) {
+        setModal(true);
+        setBlogId(blogId);
+      }
+
+      function deleteBlog(blogId) {
+        blogRequests.deleteBlog(blogId, token).then((response) => {
+            console.log("successfully deleted blog");
+            //console.log(response.data);
+            setAlert("deleted"); //display alert message
+            setTimeout(()=>{
+                setAlert(""); //autohide message after 3 seconds
+            }, 3000)
+            getOwnBlogs(); //display new list of blogs
+        }).catch((err) => {
+            console.error(err);
+        })
+      }
+
+      
 
     if (token) {
+        useEffect(()=>{
+            document.title = "Profile";
+            profileView();
+            getOwnBlogs();
+      },[]);
+
         return (
             <>
                 <Container disableGutters sx={{minHeight:"80vh", p:5}}>
+                    <Collapse in={alertOpen? true : false}>
+                        <Alert icon={<CheckCircleOutline />} severity="success" >
+                            Succuessfuly {alertOpen} blog!
+                        </Alert>
+                    </Collapse> 
                     <Paper elevation={2} sx={{p:6}}>
                         <Box sx={{
                             display:"flex",
@@ -151,8 +184,8 @@ export default function Profile(props) {
                                     ) : (
                                         <Typography>Your Blogs will show up here, if this existed :/</Typography>
                                     )}
-                                {infoLoading? (<Skeleton variant="rectangular" height="30vh" />
-                                ) : (info? info.map((val,index) => 
+                                {infoLoading? (<Skeleton variant="rectangular" height="30vh" width="60vw" />
+                                ) : (info && info.map((val,index) => 
                                 <Paper elevation={5} key={index} sx={{
                                     p:{md:5, sm:3},
                                     m:{md:1, sm:3},
@@ -173,13 +206,27 @@ export default function Profile(props) {
                                         }}>
                                         {val.content.slice(0, 50)}...
                                     </Typography>
-                                    <Box 
-                                    sx={{
-                                        width:"fit-content",
-                                        p:0, m:2, ml:0,
-                                        display:"flex", flexWrap:"nowrap",
-                                        justifyContent:"space-between",
+                                    <Box sx={{float:"right"}}>
+                                        <IconButton centerRipple title="Delete Blog" 
+                                        onClick={()=>{
+                                            deleteBlog(val._id);
                                         }}>
+                                            <DeleteTwoTone />
+                                        </IconButton>
+                                        <IconButton centerRipple title="Edit Blog"
+                                        onClick={()=>{
+                                            editBlog(val._id);
+                                        }}>
+                                            <EditNoteTwoTone />
+                                        </IconButton>
+                                    </Box>
+
+                                    <Box sx={{
+                                            width:"fit-content",
+                                            p:0, m:2, ml:0,
+                                            display:"flex", flexWrap:"nowrap",
+                                            justifyContent:"space-between"
+                                            }}>
                                         {val.tags.map((v,i)=> i % 2===0 ? (    
                                             <Typography variant="overline" key={i} sx={{
                                                 m:0, p:1.0,
@@ -206,16 +253,22 @@ export default function Profile(props) {
                                         )}
                                     </Box>
                                 </Paper>)
-                                : null
+                                
                                 )}
                             </Box>
+                            {modalOpen && <EditBlog id={currentBlogId} 
+                            modalOpen={modalOpen} setModal={setModal} 
+                            getOwnBlogs={getOwnBlogs} setAlert={setAlert} />}
+                            {/*only render EditBlog comp if the modal is opened*/}
                         </Box>
                     </Paper>
                 </Container>
             </>
         )
     }
-
+    useEffect(()=>{
+        document.title = "Sign Up!";
+    },[])
     return (
         <>
             <Container disableGutters sx={{
@@ -255,16 +308,16 @@ export default function Profile(props) {
                             createUser();
                             navi("/");
                             //setLog(true);
-                            //have a function that stores the token in local storage 
-                            //and automatically retrives it when loading the site up
                         }}>
+                            {loading && 
+                                <CircularProgress variant="indeterminate" size="30px" sx={{mr:1}} /> }
                             Sign Up!
                         </Button>
                         <br/>
                         <Button type="button" sx={{bgcolor:"info.main", color:"common.black"}}
                         onClick={()=>{
                             navi("/");
-                            //props.
+                            props.setOpen(true);
                         }} 
                         >
                             Have an account? login instead
