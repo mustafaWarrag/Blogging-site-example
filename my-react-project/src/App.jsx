@@ -18,7 +18,6 @@ import BlogOne from './pages/BlogOne.jsx';
 import Nopage from './pages/Nopage.jsx';
 import Footer from './pages/Footer.jsx';
 import About from './pages/About.jsx';
-import Done from './pages/Done.jsx';
 import BlogById from './pages/BlogById.jsx';
 import Contacts from './pages/Contacts.jsx';
 import Categories from './pages/Categories.jsx';
