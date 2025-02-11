@@ -13,7 +13,7 @@ configDotenv();
 let app = express();
 app.use(express.json());
 //app.use(cors())
-app.use(cors({origin:"blogging-site-example.netlify.app"})); //only allow the website to fetch the data
+app.use(cors({origin:"https://blogging-site-example.netlify.app"})); //only allow the website to fetch the data
 
 app.use((req, res, next) => {
     if (!renderIp.includes(req.ip)) { //if IP address of the person who accessed the server isn't one of the whitelisted ones
