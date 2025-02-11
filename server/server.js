@@ -17,7 +17,7 @@ app.use(cors({origin:"blogging-site-example.netlify.app"})); //only allow the we
 
 app.use((req, res, next) => {
     if (!renderIp.includes(req.ip)) { //if IP address of the person who accessed the server isn't one of the whitelisted ones
-        res.status(403).json({message:"Access Denied"}); //then deny response
+        return res.status(403).json({message:"Access Denied"}); //then deny response
     }
     next();
 })
