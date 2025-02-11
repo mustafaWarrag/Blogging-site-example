@@ -11,7 +11,8 @@ configDotenv();
 
 let app = express();
 app.use(express.json());
-app.use(cors());
+//app.use(cors())
+app.use(cors({origin:"blogging-site-example.netlify.app"})); //only allow the website to fetch the data
 app.use(morgan("dev"));
 
 app.get("/", (req,res) => {
